@@ -8,8 +8,8 @@ data class CodexCommentsSplitLayout(
 
 fun codexCommentsSplitLayout(): CodexCommentsSplitLayout {
     return CodexCommentsSplitLayout(
-        leftPanelWidth = 232,
-        resizeWeight = 0.28,
+        leftPanelWidth = 180,
+        resizeWeight = 0.2,
         dividerSize = 2,
     )
 }

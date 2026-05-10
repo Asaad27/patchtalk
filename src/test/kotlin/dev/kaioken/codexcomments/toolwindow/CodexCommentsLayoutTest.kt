@@ -9,8 +9,8 @@ class CodexCommentsLayoutTest {
     fun `split layout keeps thread list compact`() {
         val layout = codexCommentsSplitLayout()
 
-        assertEquals(232, layout.leftPanelWidth)
-        assertEquals(0.28, layout.resizeWeight)
+        assertEquals(180, layout.leftPanelWidth)
+        assertEquals(0.2, layout.resizeWeight)
         assertEquals(2, layout.dividerSize)
     }
 }

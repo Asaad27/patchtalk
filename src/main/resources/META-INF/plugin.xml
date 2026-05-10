@@ -13,6 +13,8 @@
     <extensions defaultExtensionNs="com.intellij">
         <projectService serviceImplementation="dev.kaioken.codexcomments.comments.CodexCommentService"/>
         <projectService serviceImplementation="dev.kaioken.codexcomments.editor.CodexCommentEditorPresentationService"/>
+        
+        <postStartupActivity implementation="dev.kaioken.codexcomments.editor.CodexCommentStartupActivity"/>
 
         <toolWindow
                 id="Codex Comments"

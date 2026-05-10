@@ -41,7 +41,8 @@ class CodexCommentThreadPresentationTest {
         )
 
         assertContains(html, "Resolved")
-        assertContains(html, "src/App.kt")
+        assertContains(html, "App.kt")
+        assertContains(html, "Line 18")
         assertContains(html, "You")
         assertContains(html, "Codex")
         assertContains(html, "Use &lt;strong&gt;less&lt;/strong&gt; chrome.")

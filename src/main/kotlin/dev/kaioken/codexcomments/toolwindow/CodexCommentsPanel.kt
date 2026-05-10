@@ -109,25 +109,29 @@ class CodexCommentsPanel(
         replyArea.lineWrap = true
         replyArea.wrapStyleWord = true
         replyArea.border = BorderFactory.createCompoundBorder(
-            JBUI.Borders.customLine(JBColor(0xD8E4F4, 0x3B4B60)),
-            JBUI.Borders.empty(8),
+            JBUI.Borders.customLine(JBColor(0xC0C8D0, 0x4B5563), 1),
+            JBUI.Borders.empty(10, 12),
         )
         replyArea.font = replyArea.font.deriveFont(Font.PLAIN, replyArea.font.size2D + 1f)
+        replyArea.background = JBColor(0xFFFFFF, 0x1A1C20)
 
         replyButton.addActionListener { replyToSelectedThread() }
         resolveButton.addActionListener { toggleResolvedState() }
         val leftHeader = JPanel(BorderLayout(8, 0)).apply {
             isOpaque = false
-            border = JBUI.Borders.empty(12)
+            border = JBUI.Borders.empty(16, 16, 8, 16)
             add(
                 JPanel().apply {
                     isOpaque = false
                     layout = BoxLayout(this, BoxLayout.Y_AXIS)
                     add(JBLabel("Comment Threads").apply {
-                        font = font.deriveFont(Font.BOLD, font.size2D + 2f)
+                        font = font.deriveFont(Font.BOLD, font.size2D + 3f)
+                        foreground = JBColor(0x1B1F23, 0xE8EAED)
                     })
+                    add(Box.createVerticalStrut(4))
                     add(JBLabel("Click a thread to jump to source").apply {
-                        foreground = JBColor(0x5F6368, 0x9AA0A6)
+                        foreground = JBColor(0x6A737D, 0x8B949E)
+                        font = font.deriveFont(font.size2D - 1f)
                     })
                 },
                 BorderLayout.CENTER,
@@ -153,9 +157,10 @@ class CodexCommentsPanel(
 
         val rightHeader = JPanel(BorderLayout()).apply {
             isOpaque = false
-            border = JBUI.Borders.empty(12, 12, 0, 12)
+            border = JBUI.Borders.empty(16, 16, 0, 16)
             add(JBLabel("Thread Detail").apply {
-                font = font.deriveFont(Font.BOLD, font.size2D + 2f)
+                font = font.deriveFont(Font.BOLD, font.size2D + 3f)
+                foreground = JBColor(0x1B1F23, 0xE8EAED)
             }, BorderLayout.WEST)
         }
 
@@ -272,8 +277,8 @@ class CodexCommentsPanel(
     private fun emptyStateHtml(message: String): String {
         return """
         <html>
-          <body style="font-family: sans-serif; color: #5F6368; padding: 20px;">
-            $message
+          <body style="font-family: -apple-system, sans-serif; color: #8B949E; margin-top: 60px; text-align: center;">
+            <div style="font-size: 14px;">$message</div>
           </body>
         </html>
         """.trimIndent()
@@ -289,22 +294,22 @@ class CodexCommentsPanel(
         ): java.awt.Component {
             val presentation = CodexCommentThreadPresentation.listItem(value)
             val background = if (isSelected) {
-                JBColor(0xEAF3FF, 0x22344A)
+                JBColor(0xF0F4FF, 0x1A1E24)
             } else {
-                JBColor(0xFFFFFF, 0x313335)
+                JBColor.PanelBackground
             }
             val borderColor = if (isSelected) {
-                JBColor(0x8AB4F8, 0x5CA9FF)
+                JBColor(0xA6C8FF, 0x36548A)
             } else {
-                JBColor(0xD8E4F4, 0x43474A)
+                JBColor(0xE0E4EB, 0x31353D)
             }
 
             return JPanel(BorderLayout(0, 8)).apply {
                 isOpaque = true
                 this.background = background
                 border = BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(borderColor),
-                    JBUI.Borders.empty(10),
+                    JBUI.Borders.customLine(borderColor, 1),
+                    JBUI.Borders.empty(12),
                 )
 
                 add(
@@ -312,8 +317,8 @@ class CodexCommentsPanel(
                         isOpaque = false
                         add(
                             JBLabel(presentation.title).apply {
-                                font = font.deriveFont(Font.BOLD)
-                                foreground = JBColor(0x202124, 0xE8EAED)
+                                font = font.deriveFont(Font.BOLD, font.size2D + 1f)
+                                foreground = JBColor(0x1B1F23, 0xE8EAED)
                             },
                             BorderLayout.WEST,
                         )
@@ -330,11 +335,12 @@ class CodexCommentsPanel(
                         isOpaque = false
                         layout = BoxLayout(this, BoxLayout.Y_AXIS)
                         add(JBLabel(presentation.location).apply {
-                            foreground = JBColor(0x5F6368, 0x9AA0A6)
+                            foreground = JBColor(0x6A737D, 0x8B949E)
+                            font = font.deriveFont(font.size2D - 1f)
                         })
-                        add(Box.createVerticalStrut(6))
+                        add(Box.createVerticalStrut(8))
                         add(JBLabel(truncate(presentation.preview, 88)).apply {
-                            foreground = JBColor(0x202124, 0xE8EAED)
+                            foreground = JBColor(0x24292E, 0xC9D1D9)
                         })
                     },
                     BorderLayout.CENTER,
@@ -342,7 +348,8 @@ class CodexCommentsPanel(
 
                 add(
                     JBLabel(presentation.updatedAtLabel).apply {
-                        foreground = JBColor(0x5F6368, 0x9AA0A6)
+                        foreground = JBColor(0x6A737D, 0x8B949E)
+                        font = font.deriveFont(font.size2D - 1f)
                     },
                     BorderLayout.SOUTH,
                 )
@@ -351,14 +358,14 @@ class CodexCommentsPanel(
 
         private fun statusBadge(label: String, status: ThreadStatus): JLabel {
             val background = if (status == ThreadStatus.OPEN) {
-                JBColor(0xE8F2FF, 0x1E3A5F)
+                JBColor(0xE8F2FF, 0x1A2A40)
             } else {
-                JBColor(0xEAF7EA, 0x1E4632)
+                JBColor(0xEAF7EA, 0x183324)
             }
             val foreground = if (status == ThreadStatus.OPEN) {
-                JBColor(0x1C5FB8, 0xB9D8FF)
+                JBColor(0x1C5FB8, 0x93C5FD)
             } else {
-                JBColor(0x2B7A3D, 0xA8E7B1)
+                JBColor(0x2B7A3D, 0x86EFAC)
             }
             return JLabel(label).apply {
                 isOpaque = true

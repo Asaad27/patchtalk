@@ -52,37 +52,71 @@ object CodexCommentThreadPresentation {
 
         val messagesHtml = thread.messages.joinToString(separator = "") { message ->
             val authorLabel = message.authorType.label()
-            val accent = if (message.authorType == CommentAuthorType.CODEX) {
-                htmlColor(JBColor(0xF5F0FF, 0x3A2F55))
+            val isUser = message.authorType == CommentAuthorType.USER
+            val accent = if (!isUser) {
+                htmlColor(JBColor(0xF9F5FF, 0x1B1324))
             } else {
-                htmlColor(JBColor(0xF5F9FF, 0x25364C))
+                htmlColor(JBColor(0xF8F9FA, 0x1F2126))
             }
-            val border = if (message.authorType == CommentAuthorType.CODEX) {
-                htmlColor(JBColor(0xDCCEFF, 0x705B9A))
+            val border = if (!isUser) {
+                htmlColor(JBColor(0xDCCEFF, 0x3B255E))
             } else {
-                htmlColor(JBColor(0xD7E7FF, 0x4D6D92))
+                htmlColor(JBColor(0xE8EAED, 0x2A2D35))
             }
+            val authorColor = if (!isUser) {
+                htmlColor(JBColor(0x603A96, 0xBB86FC))
+            } else {
+                htmlColor(JBColor(0x1A73E8, 0x8AB4F8))
+            }
+            
+            val align = if (isUser) "right" else "left"
+            val marginLeft = if (isUser) "40px" else "0"
+            val marginRight = if (isUser) "0" else "40px"
+            
             """
-            <div style="margin:0 0 12px 0; padding:12px; background:$accent; border:1px solid $border;">
-              <div style="font-weight:bold; color:$primaryText; margin-bottom:6px;">${escape(authorLabel)}</div>
-              <div style="color:$secondaryText; font-size:11px; margin-bottom:8px;">${escape(formatTimestamp(message.createdAt))}</div>
-              <div style="color:$primaryText; line-height:1.5;">${escape(message.body).replace("\n", "<br/>")}</div>
+            <div style="margin-top: 0px; margin-bottom: 16px; margin-left: $marginLeft; margin-right: $marginRight;">
+              <table width="100%" cellpadding="12" cellspacing="0" style="border: 1px solid $border; background-color: $accent;">
+                <tr>
+                  <td>
+                    <div style="text-align: $align; margin-bottom: 8px;">
+                      <b style="color:$authorColor; font-size:12px;">${escape(authorLabel)}</b>
+                      <span style="color:$secondaryText; font-size:10px;">&nbsp;&nbsp;${escape(formatTimestamp(message.createdAt))}</span>
+                    </div>
+                    <div style="color:$primaryText; font-size:13px; line-height: 1.5; text-align: left;">
+                      ${escape(message.body).replace("\n", "<br/>")}
+                    </div>
+                  </td>
+                </tr>
+              </table>
             </div>
             """.trimIndent()
         }
 
         return """
         <html>
-          <body style="font-family: sans-serif; margin: 0; padding: 12px; background: $bodyBackground;">
-            <div style="margin-bottom: 14px;">
-              <div style="font-size: 18px; font-weight: bold; color: $primaryText;">$title</div>
-              <div style="margin-top: 4px; color: $secondaryText;">$location</div>
-              <div style="margin-top: 4px; color: $secondaryText;">$path</div>
-              <div style="margin-top: 10px;">
-                <span style="background: $statusBackground; color: $statusForeground; font-weight: bold; padding: 4px 8px;">
-                  ${escape(statusLabel)}
-                </span>
-              </div>
+          <body style="font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 16px; background-color: $bodyBackground;">
+            <div style="margin-bottom: 24px; border-bottom: 1px solid ${htmlColor(JBColor(0xE8EAED, 0x313335))};">
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="padding-bottom: 6px;">
+                    <b style="font-size: 18px; color: $primaryText;">$title</b>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding-bottom: 16px;">
+                    <table cellpadding="4" cellspacing="0">
+                      <tr>
+                        <td style="background-color: $statusBackground; border: 1px solid $statusBackground;">
+                          <b style="color: $statusForeground; font-size: 10px;">${escape(statusLabel)}</b>
+                        </td>
+                        <td>
+                          <span style="color: $secondaryText; font-size: 11px;">&nbsp;&nbsp;$location</span>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
             </div>
             $messagesHtml
           </body>
