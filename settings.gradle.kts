@@ -1,1 +1,1 @@
-rootProject.name = "jetbrains-codex-comments"
+rootProject.name = "patchtalk"

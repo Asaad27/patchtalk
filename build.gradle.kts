@@ -48,6 +48,31 @@ intellijPlatform {
             sinceBuild = providers.gradleProperty("sinceBuild")
         }
     }
+
+    publishing {
+        channels = listOf("default")
+        providers.environmentVariable("PUBLISH_TOKEN").orNull?.let {
+            token = it
+        }
+    }
+
+    signing {
+        providers.environmentVariable("PRIVATE_KEY").orNull?.let {
+            privateKey = it
+        }
+        providers.environmentVariable("PRIVATE_KEY_PASSWORD").orNull?.let {
+            password = it
+        }
+        providers.environmentVariable("CERTIFICATE_CHAIN").orNull?.let {
+            certificateChain = it
+        }
+    }
+
+    pluginVerification {
+        ides {
+            recommended()
+        }
+    }
 }
 
 kotlin {

@@ -1,50 +1,67 @@
 <idea-plugin>
-    <id>dev.kaioken.codexcomments</id>
-    <name>Codex Review Comments</name>
-    <vendor>Kaioken</vendor>
+    <id>dev.kaioken.patchtalk</id>
+    <name>PatchTalk</name>
+    <vendor url="https://github.com/Asaad27">Kaioken</vendor>
 
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.mcpServer</depends>
 
     <description><![CDATA[
-    Adds local review-style comment threads to JetBrains editors and exposes them to Codex through MCP.
+    <p>PatchTalk adds local review-style comment threads to JetBrains editors without requiring a pull request.</p>
+    <p>Comments stay inside the IDE, show up in the line-number gutter, open in a dedicated tool window, and are available to any MCP-compatible coding agent such as Codex.</p>
+    <ul>
+      <li>File-level and line-level local comment threads</li>
+      <li>Reply, resolve, and reopen workflows inside the IDE</li>
+      <li>JetBrains MCP tools for listing, reading, creating, replying, and resolving threads</li>
+      <li>Project-local persistence under <code>.idea</code></li>
+    </ul>
   ]]></description>
+    <change-notes><![CDATA[
+    <p><b>0.2.0</b></p>
+    <ul>
+      <li>First public PatchTalk release.</li>
+      <li>Rebranded the plugin for agent-agnostic MCP workflows.</li>
+      <li>Polished the thread list and conversation UI.</li>
+      <li>Added gutter icons in the line-number lane.</li>
+      <li>Added Marketplace, README, license, and CI release assets.</li>
+    </ul>
+  ]]></change-notes>
 
     <extensions defaultExtensionNs="com.intellij">
-        <projectService serviceImplementation="dev.kaioken.codexcomments.comments.CodexCommentService"/>
-        <projectService serviceImplementation="dev.kaioken.codexcomments.editor.CodexCommentEditorPresentationService"/>
+        <projectService serviceImplementation="dev.kaioken.patchtalk.comments.PatchTalkCommentService"/>
+        <projectService serviceImplementation="dev.kaioken.patchtalk.editor.PatchTalkCommentEditorPresentationService"/>
         
-        <postStartupActivity implementation="dev.kaioken.codexcomments.editor.CodexCommentStartupActivity"/>
+        <postStartupActivity implementation="dev.kaioken.patchtalk.editor.PatchTalkCommentStartupActivity"/>
 
         <toolWindow
-                id="Codex Comments"
+                id="PatchTalk"
                 anchor="right"
-                factoryClass="dev.kaioken.codexcomments.toolwindow.CodexCommentsToolWindowFactory"
-                icon="/icons/codexComment.svg"/>
+                factoryClass="dev.kaioken.patchtalk.toolwindow.PatchTalkToolWindowFactory"
+                icon="/icons/patchTalkComment.svg"/>
 
-        <mcpServer.mcpToolset implementation="dev.kaioken.codexcomments.mcp.CodexCommentToolset"/>
+        <mcpServer.mcpToolset implementation="dev.kaioken.patchtalk.mcp.PatchTalkToolset"/>
     </extensions>
 
     <actions>
-        <action id="dev.kaioken.codexcomments.AddLineCommentAction"
-                class="dev.kaioken.codexcomments.actions.AddLineCommentAction"
-                text="Add Codex Comment"
-                description="Add a local Codex comment for the current line">
+        <action id="dev.kaioken.patchtalk.AddLineCommentAction"
+                class="dev.kaioken.patchtalk.actions.AddLineCommentAction"
+                text="Add PatchTalk Comment"
+                description="Add a local PatchTalk comment for the current line">
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </action>
 
-        <action id="dev.kaioken.codexcomments.AddFileCommentAction"
-                class="dev.kaioken.codexcomments.actions.AddFileCommentAction"
-                text="Add File Codex Comment"
-                description="Add a local Codex comment for the current file">
+        <action id="dev.kaioken.patchtalk.AddFileCommentAction"
+                class="dev.kaioken.patchtalk.actions.AddFileCommentAction"
+                text="Add File PatchTalk Comment"
+                description="Add a local PatchTalk comment for the current file">
             <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
             <add-to-group group-id="EditorTabPopupMenu" anchor="last"/>
         </action>
 
-        <action id="dev.kaioken.codexcomments.ShowToolWindowAction"
-                class="dev.kaioken.codexcomments.actions.ShowCodexCommentsToolWindowAction"
-                text="Show Codex Comments"
-                description="Open the Codex Comments tool window">
+        <action id="dev.kaioken.patchtalk.ShowToolWindowAction"
+                class="dev.kaioken.patchtalk.actions.ShowPatchTalkToolWindowAction"
+                text="Show PatchTalk"
+                description="Open the PatchTalk tool window">
             <add-to-group group-id="ToolsMenu" anchor="last"/>
         </action>
     </actions>
