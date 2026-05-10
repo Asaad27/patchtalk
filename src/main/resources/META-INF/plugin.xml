@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>dev.kaioken.patchtalk</id>
     <name>PatchTalk</name>
-    <vendor email="asaadbelarbi20@gmail.com" url="https://github.com/Asaad27">Kaioken</vendor>
+    <vendor email="asaadtakes@gmail.com" url="https://github.com/Asaad27">asaad27</vendor>
 
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.mcpServer</depends>
