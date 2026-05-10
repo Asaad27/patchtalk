@@ -6,6 +6,8 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.EditorFactory
 import com.intellij.openapi.editor.event.EditorFactoryEvent
 import com.intellij.openapi.editor.event.EditorFactoryListener
+import com.intellij.openapi.editor.markup.HighlighterLayer
+import com.intellij.openapi.editor.markup.RangeHighlighter
 import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.project.Project
 import dev.kaioken.patchtalk.comments.PatchTalkCommentLineTracker
@@ -24,7 +26,7 @@ class PatchTalkCommentEditorPresentationService(
 
     private val pathByEditor = linkedMapOf<Editor, String>()
     private val editorsByPath = linkedMapOf<String, LinkedHashSet<Editor>>()
-    private val annotationsByEditor = linkedMapOf<Editor, PatchTalkCommentGutterAnnotation>()
+    private val highlightersByEditor = linkedMapOf<Editor, MutableList<RangeHighlighter>>()
 
     private val editorListener = object : EditorFactoryListener {
         override fun editorCreated(event: EditorFactoryEvent) {
@@ -64,7 +66,7 @@ class PatchTalkCommentEditorPresentationService(
     }
 
     private fun unbindEditor(editor: Editor) {
-        clearAnnotation(editor)
+        clearHighlighters(editor)
         val path = pathByEditor.remove(editor) ?: return
         val editorsForPath = editorsByPath[path] ?: return
         editorsForPath -= editor
@@ -79,7 +81,7 @@ class PatchTalkCommentEditorPresentationService(
     }
 
     private fun refreshEditor(editor: Editor, path: String) {
-        clearAnnotation(editor)
+        clearHighlighters(editor)
 
         val threadsByLine = commentService.listThreads(path = path)
             .filter { it.anchor.line != null }
@@ -87,15 +89,22 @@ class PatchTalkCommentEditorPresentationService(
 
         if (threadsByLine.isEmpty()) return
 
-        val annotation = PatchTalkCommentGutterAnnotation(threadsByLine) { thread ->
-            uiService.showAndSelect(thread.id)
+        val document = editor.document
+        val highlighters = mutableListOf<RangeHighlighter>()
+        threadsByLine.forEach { (line, threads) ->
+            val zeroBasedLine = line - 1
+            if (zeroBasedLine !in 0 until document.lineCount) return@forEach
+            val highlighter = editor.markupModel.addLineHighlighter(zeroBasedLine, HighlighterLayer.FIRST, null)
+            highlighter.gutterIconRenderer = PatchTalkCommentGutterRenderer(threads) {
+                uiService.showAndSelect(threads.first().id)
+            }
+            highlighters += highlighter
         }
-        annotationsByEditor[editor] = annotation
-        editor.gutter.registerTextAnnotation(annotation, annotation)
+        highlightersByEditor[editor] = highlighters
     }
 
-    private fun clearAnnotation(editor: Editor) {
-        annotationsByEditor.remove(editor)?.let { editor.gutter.closeTextAnnotations(listOf(it)) }
+    private fun clearHighlighters(editor: Editor) {
+        highlightersByEditor.remove(editor)?.forEach { it.dispose() }
     }
 
     private fun resolveEditorPath(editor: Editor): String? {
