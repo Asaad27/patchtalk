@@ -6,4 +6,4 @@
 - Rebranded the plugin for agent-agnostic MCP workflows
 - Added gutter comment markers in the line-number panel
 - Improved the thread list and conversation UI
-- Added open-source release assets, CI, and Marketplace metadata
+- Added open-source release assets and Marketplace metadata
