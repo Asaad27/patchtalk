@@ -1,0 +1,49 @@
+<idea-plugin>
+    <id>dev.kaioken.codexcomments</id>
+    <name>Codex Review Comments</name>
+    <vendor>Kaioken</vendor>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.mcpServer</depends>
+
+    <description><![CDATA[
+    Adds local review-style comment threads to JetBrains editors and exposes them to Codex through MCP.
+  ]]></description>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <projectService serviceImplementation="dev.kaioken.codexcomments.comments.CodexCommentService"/>
+        <projectService serviceImplementation="dev.kaioken.codexcomments.editor.CodexCommentEditorPresentationService"/>
+
+        <toolWindow
+                id="Codex Comments"
+                anchor="right"
+                factoryClass="dev.kaioken.codexcomments.toolwindow.CodexCommentsToolWindowFactory"
+                icon="/icons/codexComment.svg"/>
+
+        <mcpServer.mcpToolset implementation="dev.kaioken.codexcomments.mcp.CodexCommentToolset"/>
+    </extensions>
+
+    <actions>
+        <action id="dev.kaioken.codexcomments.AddLineCommentAction"
+                class="dev.kaioken.codexcomments.actions.AddLineCommentAction"
+                text="Add Codex Comment"
+                description="Add a local Codex comment for the current line">
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </action>
+
+        <action id="dev.kaioken.codexcomments.AddFileCommentAction"
+                class="dev.kaioken.codexcomments.actions.AddFileCommentAction"
+                text="Add File Codex Comment"
+                description="Add a local Codex comment for the current file">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
+            <add-to-group group-id="EditorTabPopupMenu" anchor="last"/>
+        </action>
+
+        <action id="dev.kaioken.codexcomments.ShowToolWindowAction"
+                class="dev.kaioken.codexcomments.actions.ShowCodexCommentsToolWindowAction"
+                text="Show Codex Comments"
+                description="Open the Codex Comments tool window">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+    </actions>
+</idea-plugin>

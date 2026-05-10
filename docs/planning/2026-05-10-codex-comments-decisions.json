@@ -1,0 +1,98 @@
+{
+  "title": "JetBrains Codex Comment Plugin Decisions",
+  "description": "Choose the first-version behavior for a JetBrains plugin that adds local review-style comments to the IDE and exposes them to Codex through MCP.",
+  "decisions": [
+    {
+      "key": "comment_anchor_model",
+      "title": "Comment Anchoring",
+      "question": "How should comments attach to code in the first version?",
+      "choices": [
+        {
+          "key": "line-and-file",
+          "label": "Line + File Comments",
+          "recommended": true,
+          "description": "Support comments on a specific line and comments attached to a file without a line. Smallest reliable scope that still works outside diffs."
+        },
+        {
+          "key": "line-range-file",
+          "label": "Line Range + Line + File",
+          "description": "Support comments on a start/end line range in addition to single-line and file comments. Better for larger review notes, but adds more editor and diff complexity."
+        },
+        {
+          "key": "symbol-based",
+          "label": "Code Symbol Anchors",
+          "description": "Anchor comments to functions, classes, or symbols instead of raw lines. More robust after edits, but requires PSI-aware behavior from the start."
+        }
+      ]
+    },
+    {
+      "key": "comment_surfaces",
+      "title": "Where Comments Appear",
+      "question": "Where should the plugin show and create comments in the IDE?",
+      "choices": [
+        {
+          "key": "editor-and-diff",
+          "label": "Editor + Diff Viewer",
+          "recommended": true,
+          "description": "Show comments in normal file editors and in JetBrains diff viewers. This matches your review-focused workflow without restricting it to diffs."
+        },
+        {
+          "key": "editor-only",
+          "label": "Editor Only",
+          "description": "Limit the first version to normal file editors. Faster to build, but diff review would feel incomplete."
+        },
+        {
+          "key": "editor-diff-toolwindow",
+          "label": "Editor + Diff + Comment Tool Window",
+          "description": "Add a dedicated comment inbox/tool window from the first release. Best visibility, but materially larger scope."
+        }
+      ]
+    },
+    {
+      "key": "comment_storage",
+      "title": "Where Comment Data Lives",
+      "question": "How should the plugin persist comments?",
+      "choices": [
+        {
+          "key": "project-local-idea",
+          "label": "Project-local in .idea",
+          "recommended": true,
+          "description": "Store comments per project in JetBrains project state under .idea. Comments stay with the project and are available to the plugin and MCP when the project is open."
+        },
+        {
+          "key": "project-sidecar-json",
+          "label": "Project Sidecar JSON",
+          "description": "Store comments in a visible JSON file in the project. Easier to inspect manually, but noisier and easier to break."
+        },
+        {
+          "key": "user-local-only",
+          "label": "User-local IDE Storage",
+          "description": "Store comments only in the local IDE profile. Simplest privacy model, but comments do not travel with the project."
+        }
+      ]
+    },
+    {
+      "key": "resolution_policy",
+      "title": "Codex Resolution Flow",
+      "question": "How much authority should Codex have over comment state in the first version?",
+      "choices": [
+        {
+          "key": "reply-and-resolve",
+          "label": "Reply + Resolve",
+          "recommended": true,
+          "description": "Codex can read comments, add replies, and mark comments resolved. This is the closest to your requested workflow."
+        },
+        {
+          "key": "reply-only",
+          "label": "Reply Only",
+          "description": "Codex can answer comments but cannot resolve them. Lower risk if you want final control over comment state."
+        },
+        {
+          "key": "propose-actions",
+          "label": "Suggest Actions Only",
+          "description": "Codex can read comments and suggest fixes, but comment state changes stay manual. Lowest automation, highest friction."
+        }
+      ]
+    }
+  ]
+}

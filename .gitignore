@@ -1,0 +1,10 @@
+.gradle/
+.intellijPlatform/
+.kotlin/
+build/
+.idea/
+out/
+
+*.iml
+
+docs/planning/*.sqlite3
