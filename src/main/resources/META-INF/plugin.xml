@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>dev.kaioken.patchtalk</id>
     <name>PatchTalk</name>
-    <vendor url="https://github.com/Asaad27">Kaioken</vendor>
+    <vendor email="asaadbelarbi20@gmail.com" url="https://github.com/Asaad27">Kaioken</vendor>
 
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.mcpServer</depends>
@@ -23,7 +23,7 @@
       <li>Rebranded the plugin for agent-agnostic MCP workflows.</li>
       <li>Polished the thread list and conversation UI.</li>
       <li>Added gutter icons in the line-number lane.</li>
-      <li>Added Marketplace, README, license, and CI release assets.</li>
+      <li>Added Marketplace, README, and license release assets.</li>
     </ul>
   ]]></change-notes>
 
