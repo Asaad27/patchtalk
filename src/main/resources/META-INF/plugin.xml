@@ -17,6 +17,11 @@
     </ul>
   ]]></description>
     <change-notes><![CDATA[
+    <p><b>0.2.1</b></p>
+    <ul>
+      <li>Fixed a bug where resolved threads still displayed editor gutter markers.</li>
+      <li>Limited gutter markers to open line comments only.</li>
+    </ul>
     <p><b>0.2.0</b></p>
     <ul>
       <li>First public PatchTalk release.</li>

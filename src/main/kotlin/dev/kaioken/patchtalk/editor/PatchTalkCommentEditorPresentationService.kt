@@ -83,9 +83,9 @@ class PatchTalkCommentEditorPresentationService(
     private fun refreshEditor(editor: Editor, path: String) {
         clearHighlighters(editor)
 
-        val threadsByLine = commentService.listThreads(path = path)
-            .filter { it.anchor.line != null }
-            .groupBy { it.anchor.line!! }
+        val threadsByLine = PatchTalkCommentPresentationModel.openThreadsByLine(
+            commentService.listThreads(path = path),
+        )
 
         if (threadsByLine.isEmpty()) return
 
